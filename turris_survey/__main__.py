@@ -35,6 +35,7 @@ def main():
         "-T", "--topic", dest='topic', default='sentinel/collect/survey',
         type=str, help='topic'
     )
+
     options = parser.parse_args()
     topic = options.topic
     socket_path = options.socket_path
@@ -46,6 +47,7 @@ def main():
     data["langs"] = packages.languages()
     data["installed_packages"] = packages.installed_packages()
     send(socket_path, topic, [data,])
+
 
 if __name__ == "__main__":
     main()
