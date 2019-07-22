@@ -7,21 +7,27 @@ from turris_survey import packages
 from turris_survey import osinfo
 
 
-def send(socket,topic,message):
+def send(socket, topic, message):
     """ Sends message with given topic to given socket.
     """
     with zmq.Context() as context, context.socket(zmq.PUSH) as zmq_sock:
-        #Maximum time before a send operation returns with EAGAIN
-        #-1 = it will block until the message is sent
+        # Maximum time before a send operation returns with EAGAIN
+        # -1 = it will block until the message is sent
         zmq_sock.setsockopt(zmq.SNDTIMEO, -1)
-        #The linger period determines how long pending messages which have yet to be sent to a peer shall linger in memory after a socket is closed
-        #-1 = an infinite linger period. Pending messages shall not be discarded after close.
+        # The linger period determines how long pending messages which have
+        # yet to be sent to a peer shall linger in memory after a socket
+        # is closed
+        # -1 = an infinite linger period. Pending messages shall not be
+        # discarded after close.
         # It shall block until all pending messages have been sent to a peer.
         zmq_sock.setsockopt(zmq.LINGER, -1)
         zmq_sock.connect(socket)
-        tracker = zmq_sock.send_multipart([topic.encode(), msgpack.packb(message, use_bin_type=True)],0,False,True)
-        #wait for frames release
+        tracker = zmq_sock.send_multipart(
+            [topic.encode(), msgpack.packb(message, use_bin_type=True)],
+            0, False, True)
+        # Wait for frames release
         tracker.wait()
+
 
 def main():
 
@@ -35,7 +41,6 @@ def main():
         "-T", "--topic", dest='topic', default='sentinel/collect/survey',
         type=str, help='topic'
     )
-
     options = parser.parse_args()
     topic = options.topic
     socket_path = options.socket_path
@@ -46,7 +51,8 @@ def main():
     data["pkglist"] = packages.pkglist()
     data["langs"] = packages.languages()
     data["installed_packages"] = packages.installed_packages()
-    send(socket_path, topic, [data,])
+    send(socket_path, topic, [data, ])
+
 
 
 if __name__ == "__main__":
