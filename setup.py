@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='turris-survey',
-    version='0.1',
+    version='0.1.1',
     description='Turris OS usage survey',
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
@@ -13,7 +13,7 @@ setup(
     license='GPLv3+',
 
     install_requires=[
-        'zmq',
+        'pyzmq',
         'msgpack',
     ],
 
