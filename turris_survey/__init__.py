@@ -18,12 +18,19 @@ def get_installed_pkgs():
 
 
 def get_pkglists():
-    """ Returns dictionary where keys are enabled pkglists and values are
-    lists of enabled options of the given pkglist. """
+    """ Returns list of dictionaries where each dict represents enabled package
+    list. The dict has two keys: pkg_list and enabled_options. pkg_list is name of
+    the package list and enabled_options is list of strings enumerating enabled
+    options of the package list. """
     def _options(options):
         return [oname for oname, option in options.items() if option["enabled"]]
 
-    return {lname: _options(list["options"]) for lname, list in pkglists().items() if list["enabled"]}
+    ret = []
+    for pkglist, data in pkglists().items():
+        if data["enabled"]:
+            ret.append({"name": pkglist,
+                        "options": _options(data["options"])})
+    return ret
 
 
 def collect_data():
