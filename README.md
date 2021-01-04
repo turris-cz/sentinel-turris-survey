@@ -21,6 +21,12 @@ Options:
   default is: `sentinel/collect/survey`
 
 
+## Return value
+
+It returns 0 if send to Sentinel-Proxy was sucessful. If outgoing queue is full it
+returns 1. If there is no Sentinel-Proxy it returns 2.
+
+
 ## Testing
 
 To see outgoing data, run `dev_proxy` from

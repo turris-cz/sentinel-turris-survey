@@ -18,7 +18,7 @@ def main():
         type=str, help='topic'
     )
     options = parser.parse_args()
-    send(options.socket_path, options.topic, [collect_data(), ])
+    return send(options.socket_path, options.topic, [collect_data(), ])
 
 
 if __name__ == "__main__":

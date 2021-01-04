@@ -43,21 +43,28 @@ def collect_data():
 
 
 def send(socket, topic, message):
-    """ Sends message with given topic to given socket. """
-    with zmq.Context() as context, context.socket(zmq.PUSH) as zmq_sock:
-        # Maximum time before a send operation returns with EAGAIN
-        # -1 = it will block until the message is sent
-        zmq_sock.setsockopt(zmq.SNDTIMEO, -1)
-        # The linger period determines how long pending messages which have
-        # yet to be sent to a peer shall linger in memory after a socket
-        # is closed
-        # -1 = an infinite linger period. Pending messages shall not be
-        # discarded after close.
-        # It shall block until all pending messages have been sent to a peer.
-        zmq_sock.setsockopt(zmq.LINGER, -1)
-        zmq_sock.connect(socket)
-        tracker = zmq_sock.send_multipart(
-            [topic.encode(), msgpack.packb(message, use_bin_type=True)],
-            0, False, True)
-        # Wait for frames release
-        tracker.wait()
+    """ Sends message with given topic to given socket. It returns 0 if message
+    was sent succesfully, otherwise appropriate error code is returned. """
+    try:
+        with zmq.Context() as ctx, ctx.socket(zmq.PUSH) as zmq_sock:
+            # Size (in bytes) below which messages should always be copied even if
+            # in send() copy=False. The initial default value is 65536 (64kB).
+            # To disable copying and allow tracking we need to turn it off.
+            zmq_sock.copy_threshold = 0
+            # Maximum time in ms before a send operation returns with EAGAIN.
+            # = send supposed to be blocking for max 5s
+            zmq_sock.setsockopt(zmq.SNDTIMEO, 5000)
+            # The linger value of 0 specifies no linger period. Pending messages
+            # shall be discarded immediately after close.
+            # This must be set up to allow closing the socket if sending/waiting
+            # for send failed, otherwise close waits untill pending messages are sent.
+            zmq_sock.setsockopt(zmq.LINGER, 0)
+            zmq_sock.connect(socket)
+            tracker = zmq_sock.send_multipart(
+                [topic.encode(), msgpack.packb(message, use_bin_type=True)],
+                copy=False, track=True)
+            tracker.wait(5)
+        return 0
+    except zmq.ZMQError, zmq.NotDone:
+        # Send did not succeed
+        return 1
