@@ -65,6 +65,6 @@ def send(socket, topic, message):
                 copy=False, track=True)
             tracker.wait(5)
         return 0
-    except zmq.ZMQError, zmq.NotDone:
+    except (zmq.ZMQError, zmq.NotDone):
         # Send did not succeed
         return 1
