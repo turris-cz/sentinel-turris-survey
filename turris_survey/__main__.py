@@ -3,22 +3,35 @@
 import argparse
 
 
-from . import collect_data, send
+from .survey import collect_data, send
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-s", "--socket", dest='socket_path',
-        default='ipc:///tmp/sentinel_pull.sock',
-        type=str, help='set the socket path'
+        "-s",
+        "--socket",
+        dest="socket_path",
+        default="ipc:///tmp/sentinel_pull.sock",
+        type=str,
+        help="set the socket path",
     )
     parser.add_argument(
-        "-T", "--topic", dest='topic', default='sentinel/collect/survey',
-        type=str, help='topic'
+        "-T",
+        "--topic",
+        dest="topic",
+        default="sentinel/collect/survey",
+        type=str,
+        help="topic",
     )
     options = parser.parse_args()
-    return send(options.socket_path, options.topic, [collect_data(), ])
+    return send(
+        options.socket_path,
+        options.topic,
+        [
+            collect_data(),
+        ],
+    )
 
 
 if __name__ == "__main__":
