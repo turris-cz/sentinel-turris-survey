@@ -1,9 +1,7 @@
-import pytest
+from unittest.mock import patch
 
-from turris_survey.__main__ import send
 from turris_survey.__main__ import main as _main
 
-from unittest.mock import Mock, patch
 
 _DEFAULT_ARGS = (
     "ipc:///tmp/sentinel_pull.sock",

@@ -9,7 +9,7 @@ from zmq.tests import BaseZMQTestCase
 class TestSend(BaseZMQTestCase):
     def test_send(self):
 
-        from turris_survey import send, collect_data
+        from turris_survey.survey import send, collect_data
 
         ctx = self.Context()
         sock = ctx.socket(PULL)

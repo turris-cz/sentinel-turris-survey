@@ -1,6 +1,9 @@
-import pytest
-
-from turris_survey import get_pkglists, get_os_version, collect_data, get_installed_pkgs
+from turris_survey.survey import (
+    get_pkglists,
+    get_os_version,
+    collect_data,
+    get_installed_pkgs,
+)
 
 _EXPECTED_DATA = {
     "os_version": "5.3.0",
