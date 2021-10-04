@@ -3,13 +3,13 @@ from setuptools import setup
 
 setup(
     name="turris-survey",
-    version="0.2",
+    version="0.3",
     description="Turris OS usage survey",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    url="https://gitlab.labs.nic.cz/turris/sentinel/turris-survey",
+    url="https://gitlab.nic.cz/turris/sentinel/turris-survey",
     author="CZ.NIC, z.s.p.o. (http://www.nic.cz/)",
-    author_email="karel.koci@nic.cz",
+    author_email="packaging@turris.cz",
     license="GPLv3+",
     install_requires=[
         "pyzmq",
