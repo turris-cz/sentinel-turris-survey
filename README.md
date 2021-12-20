@@ -1,12 +1,8 @@
 # Turris survey
 
-This is collector of Turris routers (Turris OS) usage. We want to collect
-information that helps developers to do informative decisions. That is at minimum
-list of installed software and also some other network information.
-
-This is using Turris Sentinel infrastructure to send/collect information from
-routers.
-
+It collects Turris OS usage information - OS version, list of installed packages
+and package lists with their enabled options and sends it through Sentinel
+infrastructure to Turris servers.
 
 ## Usage
 
@@ -23,12 +19,5 @@ Options:
 
 ## Return value
 
-It returns 0 if send to Sentinel-Proxy was sucessful. If outgoing queue is full it
-returns 1. If there is no Sentinel-Proxy it returns 2.
+It returns 0 if send to Sentinel-Proxy was successful otherwise 1 is returned.
 
-
-## Testing
-
-To see outgoing data, run `dev_proxy` from
-[Sentinel:Proxy repository](https://gitlab.nic.cz/turris/sentinel/proxy)
-and `turris_survey` on the same socket e.g. `ipc:///tmp/turris-survey-testing.sock`.
